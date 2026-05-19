@@ -1,48 +1,413 @@
-# 📦 Event Club - Sistema de Gestión de Inventario y Eventos
+<div align="center">
 
-Una solución integral y ligera diseñada para la gestión logística de alquileres, control de inventario en tiempo real y reportes operativos. Ideal para empresas de eventos que necesitan sincronización inmediata entre el equipo de ventas, bodega y campo.
+<img width="220" src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" />
 
-## ✨ Características Principales
+# 📦 Event Club Management System
 
-* **Panel de Administración:** Visualización de stock global, control de artículos dañados y agenda interactiva (FullCalendar).
-* **Gestión de Ventas:** Interfaz intuitiva para registrar pedidos, calcular totales automáticamente y asignar métodos de pago.
-* **Monitor de Campo:** Vista optimizada para empleados con actualización automática (Live Polling) para entregas y retiros sin refrescar la página.
-* **Reportes PDF:** Generación instantánea de comprobantes individuales y reportes de caja diarios con balance de ingresos.
-* **Base de Datos Segura:** Implementación robusta con SQLite para un manejo de datos rápido y confiable.
+### Plataforma inteligente para gestión de inventario y eventos sociales 🚀
 
-##  Tecnologías Utilizadas
+<p align="center">
+  <b>Event Club</b> es un sistema moderno diseñado para administrar inventario, alquileres y operaciones logísticas en empresas dedicadas a eventos sociales y renta de mobiliario.
+</p>
 
-* **Backend:** Python 3.x + Flask
-* **Frontend:** Bootstrap 5, JavaScript (ES6+), FullCalendar API
-* **PDF Engine:** jsPDF & AutoTable
-* **Base de Datos:** SQLite3
+<p align="center">
+  <img src="https://img.shields.io/badge/EventClub-InventorySystem-purple?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Python-Flask-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
+  <img src="https://img.shields.io/badge/Bootstrap-Frontend-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
+</p>
 
-##  Instalación y Ejecución
+<p align="center">
+  <a href="#-acerca-del-proyecto">Acerca</a> •
+  <a href="#-módulos-del-sistema">Módulos</a> •
+  <a href="#-características">Características</a> •
+  <a href="#-tecnologías-utilizadas">Tecnologías</a> •
+  <a href="#-instalación">Instalación</a>
+</p>
 
-Sigue estos pasos para poner en marcha el proyecto en tu entorno local:
+</div>
 
-### 1. Clonar el repositorio
-git clone [https://github.com/tu-usuario/event-club.git](https://github.com/tu-usuario/event-club.git)
+---
+
+# 🌌 Acerca del proyecto
+
+**Event Club Management System** es una plataforma enfocada en la administración logística de eventos y control de inventario en tiempo real.
+
+El sistema fue desarrollado para facilitar:
+
+- 📦 Gestión de inventario
+- 🎪 Administración de eventos
+- 💳 Control de pagos
+- 📅 Organización de entregas
+- 🚚 Monitoreo de campo
+- 📊 Generación de reportes
+- 🧾 Gestión de ventas
+- ⚡ Sincronización operativa
+
+---
+
+# ✨ Características
+
+## 📦 Gestión de inventario
+
+- 📋 Registro de artículos
+- 📦 Control de stock en tiempo real
+- ⚠️ Gestión de artículos dañados
+- 🗂️ Organización de inventario
+- 🔄 Actualización dinámica
+
+---
+
+## 🎪 Gestión de eventos
+
+- 📅 Agenda interactiva
+- 🏠 Organización logística
+- 🚚 Control de entregas y retiros
+- 📍 Seguimiento operativo
+- ⚡ Monitoreo en tiempo real
+
+---
+
+## 💳 Sistema de ventas
+
+- 🧾 Registro de pedidos
+- 💰 Cálculo automático de totales
+- 💳 Métodos de pago
+- 📊 Control financiero
+- 📦 Gestión de alquileres
+
+---
+
+## 📄 Reportes y documentos
+
+- 📑 Reportes PDF
+- 🧾 Comprobantes automáticos
+- 📊 Reportes diarios
+- 💰 Balance de ingresos
+- ⚡ Exportación rápida
+
+---
+
+# 👨‍💼 Módulos del sistema
+
+## 🛠️ Admin Module
+
+Módulo principal de administración del sistema.
+
+### Funcionalidades
+
+- 📦 Gestión de inventario
+- 📊 Dashboard administrativo
+- 📅 Agenda de eventos
+- ⚠️ Control de incidencias
+- 📈 Supervisión operativa
+
+---
+
+## 💳 Sales Module
+
+Módulo encargado de registrar ventas y pedidos.
+
+### Funcionalidades
+
+- 🧾 Crear pedidos
+- 💰 Calcular pagos
+- 📦 Gestionar rentas
+- 📊 Historial de ventas
+- ⚡ Administración comercial
+
+---
+
+## 🚚 Field Monitor Module
+
+Módulo optimizado para personal operativo.
+
+### Funcionalidades
+
+- 🚛 Monitoreo de entregas
+- 📍 Seguimiento de retiros
+- ⚡ Actualización automática
+- 📦 Estado de pedidos
+- 🏠 Gestión logística
+
+---
+
+# 🛠️ Tecnologías utilizadas
+
+## ⚙️ Backend
+
+<p>
+  <img src="https://skillicons.dev/icons?i=python,flask" />
+</p>
+
+- Python 3
+- Flask
+- API REST
+- Gestión de rutas
+- Lógica administrativa
+
+---
+
+## 🎨 Frontend
+
+<p>
+  <img src="https://skillicons.dev/icons?i=html,css,bootstrap,js" />
+</p>
+
+- HTML5
+- CSS3
+- Bootstrap 5
+- JavaScript ES6+
+- FullCalendar API
+
+---
+
+## 🗄️ Base de datos
+
+<p>
+  <img src="https://skillicons.dev/icons?i=sqlite" />
+</p>
+
+- SQLite3
+- Persistencia de datos
+- Gestión rápida y ligera
+- Base local segura
+
+---
+
+## 📄 Generación PDF
+
+<p>
+  <img src="https://skillicons.dev/icons?i=javascript" />
+</p>
+
+- jsPDF
+- AutoTable
+- Reportes automáticos
+- Exportación PDF
+
+---
+
+## 🧰 Herramientas
+
+<p>
+  <img src="https://skillicons.dev/icons?i=git,github,vscode" />
+</p>
+
+- Git
+- GitHub
+- VS Code
+- Navegador moderno
+
+---
+
+# 📂 Estructura del proyecto
+
+```bash
+event-club/
+│
+├── templates/                # Interfaces HTML
+├── static/                   # Archivos CSS, JS e imágenes
+├── app.py                    # Servidor Flask principal
+├── eventos.db                # Base de datos SQLite
+├── requirements.txt
+├── README.md
+└── LICENSE
+```
+
+---
+
+# ⚡ Instalación
+
+## 📋 Requisitos
+
+- Python 3.x
+- Flask
+- SQLite3
+- Navegador moderno
+- VS Code
+
+---
+
+# 🚀 Configuración del proyecto
+
+## 1️⃣ Clonar repositorio
+
+```bash
+git clone https://github.com/isairey/event-club.git
+```
+
+---
+
+## 2️⃣ Entrar al proyecto
+
+```bash
 cd event-club
+```
 
-## Instalar dependencias
-Asegúrate de tener Python instalado. Se recomienda usar un entorno virtual:
+---
 
-Bash
+## 3️⃣ Instalar dependencias
+
+```bash
 pip install flask
-3. Configurar la Base de Datos
-El sistema inicializa automáticamente la base de datos eventos.db al ejecutarse por primera vez si no existe.
+```
 
-4. Ejecutar la aplicación
-Bash
+---
+
+## 4️⃣ Ejecutar aplicación
+
+```bash
 python app.py
-La aplicación estará disponible en: http://127.0.0.1:5000
+```
 
- Estructura del Proyecto
-app.py: Servidor Flask y rutas de la API.
+---
 
-templates/: Archivos HTML (index, vendedor, empleado).
+## 5️⃣ Abrir en navegador
 
-static/: Archivos CSS, imágenes y scripts JS personalizados.
+```bash
+http://127.0.0.1:5000
+```
 
-eventos.db: Base de Datos SQLite (se genera automáticamente).
+---
+
+# 📊 Funcionalidades principales
+
+## 📦 Gestión logística
+
+- Control de stock
+- Administración de artículos
+- Gestión de entregas
+- Seguimiento operativo
+
+---
+
+## 🎪 Administración de eventos
+
+- Agenda inteligente
+- Control de actividades
+- Organización de eventos
+- Supervisión logística
+
+---
+
+## 💳 Gestión financiera
+
+- Reportes de ingresos
+- Registro de pagos
+- Historial comercial
+- Generación PDF
+
+---
+
+# 📸 Vista previa
+
+## 🖥️ Interfaces del sistema
+
+<div align="center">
+
+### 📦 Dashboard de inventario
+- Gestión de stock y artículos
+
+### 📅 Agenda interactiva
+- Calendario FullCalendar para eventos
+
+### 💳 Panel de ventas
+- Registro y control de pedidos
+
+### 🚚 Monitor operativo
+- Estado de entregas y retiros
+
+### 📄 Reportes PDF
+- Generación automática de comprobantes
+
+</div>
+
+---
+
+# 🧠 Objetivos del proyecto
+
+## 🎯 Aprendizaje y logística
+
+- Desarrollo web con Flask
+- Gestión de inventarios
+- Administración de eventos
+- Automatización logística
+- Generación de reportes
+- Sincronización en tiempo real
+
+---
+
+# 🚧 Roadmap
+
+## 🔮 Próximas mejoras
+
+- ☁️ Infraestructura cloud
+- 📱 Aplicación móvil
+- 🔔 Notificaciones en tiempo real
+- 🤖 Reportes inteligentes
+- 💳 Pasarela de pagos
+- 🌐 API REST moderna
+- 📊 Dashboard avanzado
+
+---
+
+# 🤝 Contribuciones
+
+Las contribuciones son bienvenidas ❤️
+
+## Cómo contribuir
+
+1. Fork del proyecto
+
+```bash
+git checkout -b feature/nueva-funcionalidad
+```
+
+2. Commit
+
+```bash
+git commit -m "✨ Nueva funcionalidad"
+```
+
+3. Push
+
+```bash
+git push origin feature/nueva-funcionalidad
+```
+
+4. Pull Request 🚀
+
+---
+
+# 👨‍💻 Desarrollador
+
+<div align="center">
+
+## Isai Reyes — Full Stack Developer
+
+Desarrollador apasionado por plataformas logísticas, sistemas administrativos y gestión inteligente de eventos 🚀
+
+</div>
+
+---
+
+# 🌟 Apoya el proyecto
+
+⭐ Dale una estrella  
+🍴 Haz fork  
+📢 Comparte el proyecto
+
+---
+
+# 📜 Licencia
+
+Proyecto open source bajo licencia MIT orientado al aprendizaje y administración de eventos e inventarios.
+
+---
+
+<div align="center">
+
+### 📦 Event Club Management System — logística inteligente para eventos modernos 🚀
+
+</div>
