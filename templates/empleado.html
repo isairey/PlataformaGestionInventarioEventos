@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Campo - Empleados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .card-pedido {
+            border-left: 5px solid #7d5fff;
+            transition: 0.3s;
+        }
+
+        .card-pedido:hover {
+            transform: scale(1.005);
+        }
+
+        .badge-entrega {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        .badge-retiro {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
+        .ubi-link {
+            text-decoration: none;
+            color: #0d6efd;
+            font-weight: bold;
+        }
+
+        .ubi-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark mb-4 shadow" style="background-color: #2c3e50; border-bottom: 2px solid #7d5fff;">
+        <div class="container d-flex justify-content-between align-items-center" style="height: 60px;">
+            <a class="navbar-brand fw-bold" href="/">Event Club</a>
+            <div class="d-flex">
+                <a href="/" class="btn btn-sm btn-outline-light me-2">Admin</a>
+                <a href="/vendedor" class="btn btn-sm btn-outline-light me-2">Ventas</a>
+                <a href="/empleado" class="btn btn-sm btn-primary">Campo</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <h3 class="fw-bold mb-4"> Hoja de Ruta - Logística</h3>
+
+        {% if not pedidos %}
+        <div class="alert alert-info text-center shadow-sm">
+            <h5 class="m-0">No hay movimientos pendientes para mostrar.</h5>
+        </div>
+        {% endif %}
+
+        <div class="row g-4">
+            {% for p in pedidos %}
+            <div class="col-12">
+                <div class="card card-pedido shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5 class="fw-bold mb-1 text-uppercase text-primary">{{ p.cliente }}</h5>
+                                <p class="text-muted mb-2">📞 {{ p.tel }}</p>
+                                <div class="small p-2 bg-light rounded border">
+                                    <strong>📍 Ubicación:</strong><br>
+                                    <a href="https://www.google.com/maps/search/?api=1&query={{ p.ubi|urlencode }}"
+                                        target="_blank" class="ubi-link">
+                                        {{ p.ubi }} (Ver Mapa)
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border-start border-end">
+                                <h6 class="small fw-bold text-secondary text-center">EQUIPO A MOVER:</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for art in p.articulos_lista %}
+                                    <li class="list-group-item bg-transparent py-1 border-0">
+                                        <span class="badge bg-dark rounded-pill">{{ art.cant }}</span> {{ art.nom }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="row g-2 text-center">
+                                    <div class="col-6">
+                                        <div class="badge-entrega p-2 rounded shadow-sm">
+                                            <small class="d-block fw-bold">🚚 ENTREGA</small>
+                                            <span class="d-block small">{{ p.f_e }}</span>
+                                            <span class="fw-bold">{{ p.h_e }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="badge-retiro p-2 rounded shadow-sm">
+                                            <small class="d-block fw-bold">🔙 RETIRO</small>
+                                            <span class="d-block small">{{ p.f_r }}</span>
+                                            <span class="fw-bold">{{ p.h_r }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 text-end">
+                                <div class="mb-2">
+                                    <small class="text-muted d-block small">Estado Actual:</small>
+                                    <span class="badge bg-info text-dark">{{ p.estado }}</span>
+                                </div>
+                                <button class="btn btn-primary w-100 fw-bold btn-actualizar"
+                                    data-articulos='{{ p.articulos_lista|tojson|safe }}'>
+                                    ACTUALIZAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFinalizar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="/api/finalizar_pedido_grupal" method="POST" class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold">Cambiar Estado del Pedido</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="inputs-ids-ocultos"></div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">¿Qué acción realizaste?</label>
+                        <select name="nuevo_estado" class="form-select form-select-lg" id="select-estado"
+                            onchange="verificarDano()" required>
+                            <option value="Entregado">✅ Acabo de Entregar al Cliente</option>
+                            <option value="Retirado">🔙 Acabo de Retirar (Vuelve a Bodega)</option>
+                        </select>
+                    </div>
+
+                    <div id="seccion-dano" style="display: none;"
+                        class="p-3 bg-light rounded border border-danger shadow-sm">
+                        <h6 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle"></i> REPORTAR DAÑO O
+                            PÉRDIDA</h6>
+                        <hr class="my-2">
+                        <div class="mb-2">
+                            <label class="small fw-bold">Artículo afectado:</label>
+                            <select name="articulo_dano_id" class="form-select" id="lista-articulos-dano">
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-4">
+                                <label class="small fw-bold">Cantidad:</label>
+                                <input type="number" name="cantidad_danada" class="form-control" value="0" min="0">
+                            </div>
+                            <div class="col-8">
+                                <label class="small fw-bold">Descripción del daño:</label>
+                                <input type="text" name="descripcion_dano" class="form-control"
+                                    placeholder="Ej: Pata rota">
+                            </div>
+                        </div>
+                        <input type="hidden" name="hubo_dano" id="hubo_dano_hidden" value="no">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success px-4 fw-bold">GUARDAR CAMBIOS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // LÓGICA DEL PLAN B: Event Listener para los botones
+        document.querySelectorAll('.btn-actualizar').forEach(boton => {
+            boton.addEventListener('click', function () {
+                const articulos = JSON.parse(this.getAttribute('data-articulos'));
+                const containerIds = document.getElementById('inputs-ids-ocultos');
+                const listaDano = document.getElementById('lista-articulos-dano');
+
+                // Limpiar previos
+                containerIds.innerHTML = '';
+                listaDano.innerHTML = '<option value="">-- Seleccione artículo dañado --</option>';
+
+                articulos.forEach(art => {
+                    // Agregamos un input oculto por cada ID de la base de datos para actualizar todos a la vez
+                    containerIds.innerHTML += `<input type="hidden" name="pedido_ids[]" value="${art.id}">`;
+                    // Agregamos las opciones al selector de daños
+                    listaDano.innerHTML += `<option value="${art.art_id}">${art.nom}</option>`;
+                });
+
+                // Abrir el modal
+                const modal = new bootstrap.Modal(document.getElementById('modalFinalizar'));
+                modal.show();
+            });
+        });
+
+        // Mostrar/Ocultar sección de daños
+        function verificarDano() {
+            const estado = document.getElementById('select-estado').value;
+            const seccion = document.getElementById('seccion-dano');
+            const hiddenDano = document.getElementById('hubo_dano_hidden');
+
+            if (estado === 'Retirado') {
+                seccion.style.display = 'block';
+                hiddenDano.value = 'si';
+            } else {
+                seccion.style.display = 'none';
+                hiddenDano.value = 'no';
+            }
+        }
+        // --- MONITOR DE ACTUALIZACIONES EN TIEMPO REAL ---
+        let versionActual = null;
+
+        async function chequearCambios() {
+            try {
+                const res = await fetch('/api/check_updates');
+                const data = await res.json();
+
+                if (versionActual === null) {
+                    versionActual = data.version;
+                } else if (data.version !== versionActual) {
+                    // Si la versión en el servidor cambió, refrescamos la vista
+                    console.log("¡Hay nuevos pedidos o cambios de estado! Actualizando...");
+                    location.reload();
+                }
+            } catch (e) {
+                console.log("Error de conexión con el servidor...");
+            }
+        }
+
+        // Ejecutar la revisión cada 3 segundos
+        setInterval(chequearCambios, 3000);
+    </script>
+</body>
+
+</html>

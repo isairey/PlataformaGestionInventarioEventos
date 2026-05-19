@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - Cotizador Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark mb-4 shadow" style="background-color: #2c3e50; border-bottom: 2px solid #7d5fff;">
+        <div class="container d-flex justify-content-between align-items-center" style="height: 60px;">
+            <a class="navbar-brand fw-bold" href="/">Event Club</a>
+            <div class="d-flex">
+                <a href="/" class="btn btn-sm btn-outline-light me-2">Admin</a>
+                <a href="/vendedor" class="btn btn-sm btn-primary me-2">Ventas</a>
+                <a href="/empleado" class="btn btn-sm btn-outline-light">Campo</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <div class="card shadow border-0 p-4" style="border-radius: 15px;">
+            <form action="/api/crear_reserva" method="POST" id="form-venta" onsubmit="return validarFormulario()">
+                <h4 class="fw-bold text-primary mb-4">Nueva Reserva y Cotización</h4>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Nombre del Cliente *</label>
+                        <input type="text" name="nombre" class="form-control" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Teléfono / Celular *</label>
+                        <input type="tel" name="celular" class="form-control" placeholder="6000-0000" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Lugar del Evento *</label>
+                        <input type="text" name="direccion" class="form-control" placeholder="Dirección exacta" required>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold border-bottom pb-2 mb-3">Detalle de Alquiler</h5>
+                <div id="contenedor-articulos">
+                    <div class="row g-2 mb-3 articulo-fila align-items-center">
+                        <div class="col-md-6">
+                            <select name="articulo_id[]" class="form-select sel-art" required>
+                                <option value="" disabled selected>Seleccione un artículo...</option>
+                                {% for item in inventario %}
+                                <option value="{{ item.id }}" data-precio="{{ item.precio if item.precio else 0 }}">
+                                    {{ item.nombre }} (${{ item.precio if item.precio else 0 }}/día)
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="cantidad[]" class="form-control inp-cant" value="1" min="1" required>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <span class="subtotal-fila fw-bold text-dark fs-5">$0.00</span>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarFila(this)">×</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-primary mb-4" onclick="anadirFila()">+ Añadir artículo</button>
+
+                <div class="row g-3 p-3 bg-light rounded border">
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Fecha Entrega *</label>
+                        <input type="date" name="fecha_entrega" id="f_e" class="form-control" required>
+                        <input type="time" name="hora_entrega" class="form-control mt-1" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Fecha Retiro *</label>
+                        <input type="date" name="fecha_retiro" id="f_r" class="form-control" required>
+                        <input type="time" name="hora_retiro" class="form-control mt-1" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Método de Pago *</label>
+                        <select name="metodo_pago" class="form-select" required>
+                            <option value="Yappy">📱 Yappy</option>
+                            <option value="Efectivo">💵 Efectivo</option>
+                            <option value="ACH">🏦 ACH / Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white p-3 text-center border-0 shadow">
+                            <small class="text-uppercase fw-bold" style="font-size: 0.7rem;">Total a Pagar</small>
+                            <h2 class="m-0 fw-bold" id="txt-total">$0.00</h2>
+                            <input type="hidden" name="monto_total" id="inp-total">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="error-msg" class="text-danger mt-3 fw-bold text-center" style="display:none;">
+                    ⚠️ Por favor, complete todos los campos y asegúrese de que el total no sea $0.00.
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-4 shadow fw-bold">
+                    CONFIRMAR RESERVA
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. FUNCIÓN DE VALIDACIÓN ANTES DE ENVIAR ---
+        function validarFormulario() {
+            const total = parseFloat(document.getElementById('inp-total').value) || 0;
+            const errorMsg = document.getElementById('error-msg');
+
+            // Si el total es 0, significa que no eligieron artículos válidos o las fechas están mal
+            if (total <= 0) {
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = "⚠️ Error: El total no puede ser $0.00. Verifique artículos y fechas.";
+                return false; // Bloquea el envío
+            }
+
+            // Verificar si hay algún select sin elegir (valor vacío)
+            const selects = document.querySelectorAll('.sel-art');
+            for(let s of selects) {
+                if(s.value === "") {
+                    errorMsg.style.display = 'block';
+                    errorMsg.innerText = "⚠️ Error: Seleccione un artículo válido en todas las filas.";
+                    return false;
+                }
+            }
+
+            errorMsg.style.display = 'none';
+            return true; // Permite el envío
+        }
+
+        // --- 2. LÓGICA DE CÁLCULO (Igual que antes pero optimizada) ---
+        function calcularTodo() {
+            let totalGeneral = 0;
+            const fEntrega = document.getElementById('f_e').value;
+            const fRetiro = document.getElementById('f_r').value;
+            let dias = 1;
+
+            if (fEntrega && fRetiro) {
+                const d1 = new Date(fEntrega);
+                const d2 = new Date(fRetiro);
+                const diff = d2 - d1;
+                dias = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                if (dias < 1) dias = 1; 
+            }
+
+            document.querySelectorAll('.articulo-fila').forEach(fila => {
+                const select = fila.querySelector('.sel-art');
+                const cantidadInput = fila.querySelector('.inp-cant');
+                
+                if(select.selectedIndex > 0) { // Solo si eligieron algo
+                    const precio = parseFloat(select.options[select.selectedIndex].getAttribute('data-precio')) || 0;
+                    const cantidad = parseInt(cantidadInput.value) || 0;
+                    const subtotal = precio * cantidad * dias;
+                    fila.querySelector('.subtotal-fila').innerText = `$${subtotal.toFixed(2)}`;
+                    totalGeneral += subtotal;
+                }
+            });
+
+            document.getElementById('txt-total').innerText = `$${totalGeneral.toFixed(2)}`;
+            document.getElementById('inp-total').value = totalGeneral.toFixed(2);
+        }
+
+        // --- 3. FUNCIONES DE FILAS ---
+        function anadirFila() {
+            const container = document.getElementById('contenedor-articulos');
+            const filas = document.querySelectorAll('.articulo-fila');
+            const nuevaFila = filas[0].cloneNode(true);
+            nuevaFila.querySelector('.inp-cant').value = 1;
+            nuevaFila.querySelector('.sel-art').selectedIndex = 0; // Reiniciar selección
+            nuevaFila.querySelector('.subtotal-fila').innerText = "$0.00";
+            container.appendChild(nuevaFila);
+        }
+
+        function eliminarFila(btn) {
+            if (document.querySelectorAll('.articulo-fila').length > 1) {
+                btn.closest('.articulo-fila').remove();
+                calcularTodo();
+            }
+        }
+
+        // Escuchar cambios
+        document.getElementById('form-venta').addEventListener('input', calcularTodo);
+        document.getElementById('form-venta').addEventListener('change', calcularTodo);
+        window.onload = calcularTodo;
+    </script>
+</body>
+</html>

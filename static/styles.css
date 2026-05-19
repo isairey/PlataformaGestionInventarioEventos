@@ -1,0 +1,72 @@
+:root {
+    --primario: #2c3e50;
+    --accion: #17a2b8;
+    --fondo: #f8f9fa;
+    --texto: #34495e;
+}
+
+body {
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar unificada */
+.navbar-custom {
+    background-color: var(--primario);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* Tarjetas (Cards) */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-weight: bold;
+    color: var(--primario);
+}
+
+/* Botones */
+.btn-primary { background-color: var(--primario); border: none; }
+.btn-info { background-color: var(--accion); border: none; color: white; }
+.btn-success { background-color: #27ae60; border: none; }
+
+/* Inputs */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #dcdde1;
+    padding: 10px;
+}
+
+.form-control:focus {
+    border-color: var(--accion);
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+/* Badges de estado */
+.badge-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+#body-danos td {
+    padding: 15px !important;
+    background-color: #fff5f5; /* Un tono rojizo muy suave para indicar daño */
+}
+body {
+    transition: opacity 0.5s ease-in-out;
+}
+
