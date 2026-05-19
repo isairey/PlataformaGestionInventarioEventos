@@ -300,30 +300,7 @@ http://127.0.0.1:5000
 
 ---
 
-# 📸 Vista previa
 
-## 🖥️ Interfaces del sistema
-
-<div align="center">
-
-### 📦 Dashboard de inventario
-- Gestión de stock y artículos
-
-### 📅 Agenda interactiva
-- Calendario FullCalendar para eventos
-
-### 💳 Panel de ventas
-- Registro y control de pedidos
-
-### 🚚 Monitor operativo
-- Estado de entregas y retiros
-
-### 📄 Reportes PDF
-- Generación automática de comprobantes
-
-</div>
-
----
 
 # 🧠 Objetivos del proyecto
 
