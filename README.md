@@ -204,7 +204,7 @@ Módulo optimizado para personal operativo.
 # 📂 Estructura del proyecto
 
 ```bash
-event-club/
+PlataformaGestionInventarioEventos/
 │
 ├── templates/                # Interfaces HTML
 ├── static/                   # Archivos CSS, JS e imágenes
@@ -234,7 +234,7 @@ event-club/
 ## 1️⃣ Clonar repositorio
 
 ```bash
-git clone https://github.com/isairey/event-club.git
+git clone https://github.com/isairey/PlataformaGestionInventarioEventos.git
 ```
 
 ---
@@ -242,7 +242,7 @@ git clone https://github.com/isairey/event-club.git
 ## 2️⃣ Entrar al proyecto
 
 ```bash
-cd event-club
+cd PlataformaGestionInventarioEventos
 ```
 
 ---
